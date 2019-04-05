@@ -1,0 +1,78 @@
+"""
+Good morning! Here's your coding interview problem for today.
+
+This problem was asked by Google.
+
+Given a singly linked list and an integer k, remove the kth last element from the list.
+k is guaranteed to be smaller than the length of the list.
+
+The list is very long, so making more than one pass is prohibitively expensive.
+
+Do this in constant space and in one pass.
+"""
+
+
+
+class SLList(object):
+    class Node(object):
+        def __init__(self, value):
+            self.value = value
+            self.next = None
+
+    def __init__(self):
+        self.root = SLList.Node(None)
+        self.end = self.root
+
+    def __iter__(self):
+        node = self.root.next
+        while node:
+            yield node.value
+            node = node.next
+
+    def add(self, value):
+        node = SLList.Node(value)
+        self.end.next = node
+        self.end = node
+
+    def reverse(self):
+        node = self.root
+        carry = self.root.next
+        next = carry
+        while next:
+            prev = node
+            node = next
+            next = node.next
+            node.next = prev
+        self.end = carry
+        self.end.next = None
+        self.root.next = node
+
+    def remove(self, index):
+        node = self.root
+        for i in range(index - 1):
+            if not node:
+                break
+            node = node.next
+        node.next = node.next.next
+
+
+def sllist_remove_at_k_last(sllist, i):
+    sllist.reverse()
+    sllist.remove(i)
+
+
+def main():
+
+    x = SLList()
+    for i in range(10):
+        x.add(i)
+
+    print(f'({", ".join(map(str, (v for v in x)))})')
+    x.remove(3)
+    print(f'({", ".join(map(str, (v for v in x)))})')
+    sllist_remove_at_k_last(x, 0)
+    print(f'({", ".join(map(str, (v for v in x)))})')
+
+
+if __name__ == '__main__':
+    main()
